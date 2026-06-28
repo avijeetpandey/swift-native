@@ -1,0 +1,222 @@
+# Examples
+
+A collection of complete, copy-pasteable examples. Every snippet here compiles
+against the real API. To try one, drop it into a Swift Native app
+(`swiftnative new MyApp`) and run `swiftnative run --preview`.
+
+- [Hello, world](#hello-world)
+- [A counter](#a-counter)
+- [A to-do list](#a-to-do-list)
+- [A settings screen](#a-settings-screen)
+- [Tabbed navigation](#tabbed-navigation)
+- [Passing state to a child](#passing-state-to-a-child)
+- [Running an app](#running-an-app)
+
+## Hello, world
+
+```swift
+import SwiftNativeCore
+
+struct HelloView: View {
+    var body: some View {
+        Text("Hello, Swift Native")
+            .font(.title)
+            .foregroundColor(.blue)
+            .padding(24)
+    }
+}
+```
+
+## A counter
+
+```swift
+import SwiftNativeCore
+
+struct CounterView: View {
+    @State private var count = 0
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Count: \(count)")
+                .font(.system(size: 24, weight: .bold))
+            HStack(spacing: 12) {
+                Button("−") { count -= 1 }
+                Button("+") { count += 1 }
+            }
+        }
+        .padding(24)
+    }
+}
+```
+
+## A to-do list
+
+Uses `ForEach` for the rows. Because each row has a stable `id`, adding and
+removing items moves the existing native views instead of rebuilding the list.
+
+```swift
+import SwiftNativeCore
+
+struct Todo: Identifiable {
+    let id: Int
+    var title: String
+}
+
+struct TodoView: View {
+    @State private var todos: [Todo] = [
+        Todo(id: 1, title: "Learn Swift Native"),
+        Todo(id: 2, title: "Ship an app"),
+    ]
+    @State private var nextID = 3
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("To-do (\(todos.count))").font(.title)
+
+            Button("Add") {
+                todos.append(Todo(id: nextID, title: "Task \(nextID)"))
+                nextID += 1
+            }
+
+            List {
+                ForEach(todos) { todo in
+                    HStack {
+                        Text(todo.title)
+                        Spacer()
+                        Button("Delete") {
+                            todos.removeAll { $0.id == todo.id }
+                        }
+                    }
+                    .padding(8)
+                }
+            }
+        }
+        .padding(24)
+    }
+}
+```
+
+## A settings screen
+
+```swift
+import SwiftNativeCore
+
+struct SettingsView: View {
+    @State private var notifications = true
+    @State private var darkMode = false
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Settings").font(.title)
+            Toggle("Notifications", isOn: $notifications)
+            Toggle("Dark Mode", isOn: $darkMode)
+            Divider()
+            Text(notifications ? "You'll get alerts" : "Alerts are off")
+                .foregroundColor(.gray)
+        }
+        .padding(24)
+    }
+}
+```
+
+## Tabbed navigation
+
+A simple state-driven "router" — switch on a `@State` value to show different
+screens.
+
+```swift
+import SwiftNativeCore
+
+struct RootView: View {
+    @State private var tab = 0
+
+    var body: some View {
+        VStack(spacing: 0) {
+            if tab == 0 {
+                CounterView()
+            } else if tab == 1 {
+                TodoView()
+            } else {
+                SettingsView()
+            }
+
+            Divider()
+
+            HStack(spacing: 24) {
+                Button("Counter") { tab = 0 }
+                Button("To-do") { tab = 1 }
+                Button("Settings") { tab = 2 }
+            }
+            .padding(12)
+        }
+    }
+}
+```
+
+## Passing state to a child
+
+Use `@Binding` and the `$` prefix to let a child read and write a parent's state.
+
+```swift
+import SwiftNativeCore
+
+struct ParentView: View {
+    @State private var volume = 3
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("Volume: \(volume)")
+            Stepper(value: $volume)
+        }
+    }
+}
+
+struct Stepper: View {
+    @Binding var value: Int
+
+    var body: some View {
+        HStack(spacing: 16) {
+            Button("−") { value -= 1 }
+            Button("+") { value += 1 }
+        }
+    }
+}
+```
+
+## Running an app
+
+Give your app an entry point. On macOS it opens a native window; with
+`--preview` it renders the native tree headlessly (handy for CI or a machine
+without a display).
+
+```swift
+import SwiftNativeCore
+#if canImport(AppKit)
+import SwiftNativeAppKit
+#endif
+
+func makeRoot() -> AnyView { AnyView(RootView()) }
+
+@main
+struct MyApp {
+    static func main() {
+        #if canImport(AppKit)
+        if CommandLine.arguments.contains("--preview") {
+            print(SwiftNativePreview.render { makeRoot() })
+        } else {
+            SwiftNativeApp.run(title: "MyApp") { makeRoot() }
+        }
+        #endif
+    }
+}
+```
+
+Then:
+
+```sh
+swiftnative run            # native macOS window
+swiftnative run --preview  # print the native view tree
+```
+
+For iOS and Android entry points, see the files generated by `swiftnative new`
+and the platform notes in [SETUP.md](../SETUP.md).
