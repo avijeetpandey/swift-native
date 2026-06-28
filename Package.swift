@@ -15,6 +15,7 @@ let package = Package(
         .library(name: "SwiftNativeUIKit", targets: ["SwiftNativeUIKit"]),
         .library(name: "SwiftNativeAndroid", targets: ["SwiftNativeAndroid"]),
         .library(name: "CounterExample", targets: ["CounterExample"]),
+        .executable(name: "SwiftNativeTestSuite", targets: ["SwiftNativeTestSuite"]),
     ],
     targets: [
         .target(name: "SwiftNativeCore"),
@@ -24,5 +25,16 @@ let package = Package(
         .target(name: "SwiftNativeUIKit", dependencies: ["SwiftNativeCore"]),
         .target(name: "SwiftNativeAndroid", dependencies: ["SwiftNativeCore"]),
         .target(name: "CounterExample", dependencies: ["SwiftNativeCore"]),
+        .executableTarget(
+            name: "SwiftNativeTestSuite",
+            dependencies: [
+                "SwiftNativeCore", "SwiftNativeTestRenderer", "SwiftNativeTesting",
+                "SwiftNativeAppKit", "CounterExample",
+            ]
+        ),
+        .testTarget(
+            name: "SwiftNativeCoreTests",
+            dependencies: ["SwiftNativeCore", "SwiftNativeTestRenderer", "CounterExample"]
+        ),
     ]
 )
