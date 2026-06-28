@@ -10,6 +10,7 @@ let package = Package(
     products: [
         .library(name: "SwiftNativeCore", targets: ["SwiftNativeCore"]),
         .library(name: "SwiftNativeTestRenderer", targets: ["SwiftNativeTestRenderer"]),
+        .library(name: "SwiftNativeTesting", targets: ["SwiftNativeTesting"]),
         .library(name: "SwiftNativeAppKit", targets: ["SwiftNativeAppKit"]),
         .library(name: "SwiftNativeUIKit", targets: ["SwiftNativeUIKit"]),
         .library(name: "SwiftNativeAndroid", targets: ["SwiftNativeAndroid"]),
@@ -18,6 +19,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftNativeCore"),
         .target(name: "SwiftNativeTestRenderer", dependencies: ["SwiftNativeCore"]),
+        .target(name: "SwiftNativeTesting"),
         .target(name: "SwiftNativeAppKit", dependencies: ["SwiftNativeCore"]),
         .target(name: "SwiftNativeUIKit", dependencies: ["SwiftNativeCore"]),
         .target(name: "SwiftNativeAndroid", dependencies: ["SwiftNativeCore"]),
