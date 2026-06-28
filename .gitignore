@@ -1,0 +1,43 @@
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Xcode
+*.xcodeproj
+*.xcworkspace
+xcuserdata/
+DerivedData/
+*.xcuserstate
+
+# Coverage / profiling
+*.profraw
+*.profdata
+*.coverage
+coverage.txt
+
+# Android
+android-host/.gradle/
+android-host/build/
+android-host/local.properties
+android-host/src/main/jniLibs/*/*.so
+*.apk
+*.aab
+
+# Gradle
+.gradle/
+build/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editors
+.idea/
+*.swp
+*~
+.vscode/
+
+# Misc
+*.log

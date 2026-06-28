@@ -1,0 +1,20 @@
+# Normalize line endings
+* text=auto eol=lf
+
+# Swift sources
+*.swift text diff=swift
+
+# Treat these as text
+*.md   text
+*.json text
+*.yml  text
+*.yaml text
+*.kt   text
+*.c    text
+*.h    text
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.so  binary
+*.apk binary
