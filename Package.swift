@@ -11,30 +11,56 @@ let package = Package(
         .library(name: "SwiftNativeCore", targets: ["SwiftNativeCore"]),
         .library(name: "SwiftNativeTestRenderer", targets: ["SwiftNativeTestRenderer"]),
         .library(name: "SwiftNativeTesting", targets: ["SwiftNativeTesting"]),
-        .library(name: "SwiftNativeAppKit", targets: ["SwiftNativeAppKit"]),
         .library(name: "SwiftNativeUIKit", targets: ["SwiftNativeUIKit"]),
+        .library(name: "SwiftNativeAppKit", targets: ["SwiftNativeAppKit"]),
         .library(name: "SwiftNativeAndroid", targets: ["SwiftNativeAndroid"]),
         .library(name: "CounterExample", targets: ["CounterExample"]),
+        .executable(name: "swiftnative", targets: ["swiftnative"]),
         .executable(name: "SwiftNativeTestSuite", targets: ["SwiftNativeTestSuite"]),
     ],
     targets: [
         .target(name: "SwiftNativeCore"),
-        .target(name: "SwiftNativeTestRenderer", dependencies: ["SwiftNativeCore"]),
-        .target(name: "SwiftNativeTesting"),
-        .target(name: "SwiftNativeAppKit", dependencies: ["SwiftNativeCore"]),
-        .target(name: "SwiftNativeUIKit", dependencies: ["SwiftNativeCore"]),
-        .target(name: "SwiftNativeAndroid", dependencies: ["SwiftNativeCore"]),
-        .target(name: "CounterExample", dependencies: ["SwiftNativeCore"]),
+        .target(
+            name: "SwiftNativeTestRenderer",
+            dependencies: ["SwiftNativeCore"]
+        ),
+        .target(
+            name: "SwiftNativeTesting"
+        ),
+        .target(
+            name: "SwiftNativeUIKit",
+            dependencies: ["SwiftNativeCore"]
+        ),
+        .target(
+            name: "SwiftNativeAppKit",
+            dependencies: ["SwiftNativeCore"]
+        ),
+        .target(
+            name: "SwiftNativeAndroid",
+            dependencies: ["SwiftNativeCore"]
+        ),
+        .target(
+            name: "CounterExample",
+            dependencies: ["SwiftNativeCore"]
+        ),
+        .executableTarget(name: "swiftnative"),
         .executableTarget(
             name: "SwiftNativeTestSuite",
             dependencies: [
-                "SwiftNativeCore", "SwiftNativeTestRenderer", "SwiftNativeTesting",
-                "SwiftNativeAppKit", "CounterExample",
+                "SwiftNativeCore",
+                "SwiftNativeTestRenderer",
+                "SwiftNativeTesting",
+                "SwiftNativeAppKit",
+                "CounterExample",
             ]
         ),
         .testTarget(
             name: "SwiftNativeCoreTests",
-            dependencies: ["SwiftNativeCore", "SwiftNativeTestRenderer", "CounterExample"]
+            dependencies: [
+                "SwiftNativeCore",
+                "SwiftNativeTestRenderer",
+                "CounterExample",
+            ]
         ),
     ]
 )
