@@ -10,9 +10,11 @@ let package = Package(
     products: [
         .library(name: "SwiftNativeCore", targets: ["SwiftNativeCore"]),
         .library(name: "SwiftNativeTestRenderer", targets: ["SwiftNativeTestRenderer"]),
+        .library(name: "CounterExample", targets: ["CounterExample"]),
     ],
     targets: [
         .target(name: "SwiftNativeCore"),
         .target(name: "SwiftNativeTestRenderer", dependencies: ["SwiftNativeCore"]),
+        .target(name: "CounterExample", dependencies: ["SwiftNativeCore"]),
     ]
 )
